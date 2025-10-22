@@ -49,49 +49,59 @@ const Register = () => {
 };
 
   return(
-    <div className="register_container" style={{width: "50%"}}>
-      <div className="header" style={{display: "flex",flexDirection: "row", justifyContent: "space-between"}}>
-          <span className="text" style={{flexGrow:"1"}}>SignUp</span> 
-          <div style={{display: "flex",flexDirection: "row", justifySelf: "end", alignSelf: "start" }}>
-          <a href="/" onClick={()=>{gohome()}} style={{justifyContent: "space-between", alignItems:"flex-end"}}>
-            <img style={{width:"1cm"}} src={close_icon} alt="X"/>
+    <div className='container container-narrow py-4'>
+      <div className='card card-clean p-4 mx-auto' style={{maxWidth:'680px'}}>
+        <div className='d-flex align-items-start justify-content-between'>
+          <h3 className='mb-3'>Sign up</h3>
+          <a href='/' onClick={()=>{gohome()}} className='btn btn-sm btn-outline-secondary'>
+            Close
           </a>
-          </div>
-          <hr/>
         </div>
 
         <form onSubmit={register}>
-        <div className="inputs">
-          <div className="input">
-            <img src={user_icon} className="img_icon" alt='Username'/>
-            <input type="text"  name="username" placeholder="Username" className="input_field" onChange={(e) => setUserName(e.target.value)}/>
+          <div className='row g-3'>
+            <div className='col-md-6'>
+              <label className='form-label'>Username</label>
+              <div className='input-group'>
+                <span className='input-group-text'><img src={user_icon} alt='Username' className='img_icon' style={{width:'20px'}}/></span>
+                <input type="text" name="username" placeholder="Username" className="form-control" onChange={(e) => setUserName(e.target.value)}/>
+              </div>
+            </div>
+            <div className='col-md-6'>
+              <label className='form-label'>Email</label>
+              <div className='input-group'>
+                <span className='input-group-text'><img src={email_icon} alt='Email' className='img_icon' style={{width:'20px'}}/></span>
+                <input type="email" name="email" placeholder="email" className="form-control" onChange={(e) => setEmail(e.target.value)}/>
+              </div>
+            </div>
+            <div className='col-md-6'>
+              <label className='form-label'>First Name</label>
+              <div className='input-group'>
+                <span className='input-group-text'><img src={user_icon} alt='First Name' className='img_icon' style={{width:'20px'}}/></span>
+                <input type="text" name="first_name" placeholder="First Name" className="form-control" onChange={(e) => setFirstName(e.target.value)}/>
+              </div>
+            </div>
+            <div className='col-md-6'>
+              <label className='form-label'>Last Name</label>
+              <div className='input-group'>
+                <span className='input-group-text'><img src={user_icon} alt='Last Name' className='img_icon' style={{width:'20px'}}/></span>
+                <input type="text" name="last_name" placeholder="Last Name" className="form-control" onChange={(e) => setlastName(e.target.value)}/>
+              </div>
+            </div>
+            <div className='col-12'>
+              <label className='form-label'>Password</label>
+              <div className='input-group'>
+                <span className='input-group-text'><img src={password_icon} alt='Password' className='img_icon' style={{width:'20px'}}/></span>
+                <input name="psw" type="password" placeholder="Password" className="form-control" onChange={(e) => setPassword(e.target.value)}/>
+              </div>
+            </div>
           </div>
-          <div>
-            <img src={user_icon} className="img_icon" alt='First Name'/>
-            <input type="text"  name="first_name" placeholder="First Name" className="input_field" onChange={(e) => setFirstName(e.target.value)}/>
+          <div className='d-flex justify-content-end mt-4'>
+            <input className='btn btn-brand text-white' type='submit' value='Register'/>
           </div>
-
-          <div>
-            <img src={user_icon} className="img_icon" alt='Last Name'/>
-            <input type="text"  name="last_name" placeholder="Last Name" className="input_field" onChange={(e) => setlastName(e.target.value)}/>
-          </div>
-
-          <div>
-            <img src={email_icon} className="img_icon" alt='Email'/>
-            <input type="email"  name="email" placeholder="email" className="input_field" onChange={(e) => setEmail(e.target.value)}/>
-          </div>
-
-          <div className="input">
-            <img src={password_icon} className="img_icon" alt='password'/>
-            <input name="psw" type="password"  placeholder="Password" className="input_field" onChange={(e) => setPassword(e.target.value)}/>
-          </div>
-
-        </div>
-        <div className="submit_panel">
-          <input className="submit" type="submit" value="Register"/>
-        </div>
-      </form>
+        </form>
       </div>
+    </div>
   )
 }
 

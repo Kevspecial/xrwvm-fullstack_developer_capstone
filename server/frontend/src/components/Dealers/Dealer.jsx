@@ -68,23 +68,31 @@ const Dealer = () => {
 
 
 return(
-  <div style={{margin:"20px"}}>
-      <Header/>
-      <div style={{marginTop:"10px"}}>
-      <h1 style={{color:"grey"}}>{dealer.full_name}{postReview}</h1>
-      <h4  style={{color:"grey"}}>{dealer['city']},{dealer['address']}, Zip - {dealer['zip']}, {dealer['state']} </h4>
+  <div>
+    <Header/>
+    <div className="container container-narrow py-4">
+      <div className="d-flex align-items-center justify-content-between mb-2">
+        <h2 className="mb-0 text-dark">{dealer.full_name}</h2>
+        {postReview}
       </div>
-      <div class="reviews_panel">
+      <p className="text-muted">{dealer['city']}, {dealer['address']}, Zip - {dealer['zip']}, {dealer['state']}</p>
+      <div className="reviews_panel">
       {reviews.length === 0 && unreviewed === false ? (
-        <text>Loading Reviews....</text>
+        <span className='text-muted'>Loading reviews…</span>
       ):  unreviewed === true? <div>No reviews yet! </div> :
-      reviews.map(review => (
-        <div className='review_panel'>
-          <img src={senti_icon(review.sentiment)} className="emotion_icon" alt='Sentiment'/>
+      reviews.map((review, idx) => (
+        <div className='review_panel card-clean' key={`${review.dealership}-${idx}`}>
+          <div className='d-flex align-items-center gap-2 mt-2'>
+            <img src={senti_icon(review.sentiment)} className="emotion_icon" alt='Sentiment'/>
+            <span className={`badge ${review.sentiment === 'positive' ? 'badge-positive' : review.sentiment === 'negative' ? 'badge-negative' : 'badge-neutral'}`.trim()}>
+              {review.sentiment}
+            </span>
+          </div>
           <div className='review'>{review.review}</div>
-          <div className="reviewer">{review.name} {review.car_make} {review.car_model} {review.car_year}</div>
+          <div className="reviewer">{review.name} • {review.car_make} {review.car_model} {review.car_year}</div>
         </div>
       ))}
+    </div>
     </div>  
   </div>
 )

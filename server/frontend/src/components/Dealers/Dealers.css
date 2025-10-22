@@ -1,30 +1,18 @@
-table{
-    margin:5px;
-    padding:10px;
-    border: grey solid 1px;
-    width:100%
-  }
-  
-  td{
-    padding:10px;
-    align-self: center;
-    border:solid grey .5px;
-    text-align: center;
-    font-size: large;
-  }
+/* Rely on Bootstrap table styles, keep minor tweaks */
+td{
+  text-align: center;
+}
   
   .review_panel{
     display: flex;
     flex-direction: column;
-    border: solid grey;
     position: relative;
-    height:7cm;
-    width:6cm;
+    min-height: 220px;
+    width: 320px;
     overflow-y: scroll;
-    padding:.3cm;
-    padding-top: 0%;
-    border-radius:10px; 
-    box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.5);
+    padding: 1rem;
+    border-radius:12px; 
+    box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.08);
     margin-bottom: .5cm;
     justify-content: space-between;
   }
@@ -35,15 +23,7 @@ table{
     font-size: larger;
   }
 
-  th{
-    padding:5px;
-    align-self: center;
-    text-align: center;
-    font-size: large;
-    margin-bottom: 1cm;
-    vertical-align: middle;
-    color: black;
-  }
+  th{ vertical-align: middle; }
 
   .reviews_panel {
     display: flex;
@@ -56,7 +36,7 @@ table{
   }
 
   .reviewer {
-    margin: 10px; /* Optional margin for spacing */
+    margin: 10px;
     font-style: italic;
     color: gray;
     font-size: small;
@@ -66,21 +46,9 @@ table{
   margin-top: 1.5cm;
 }
 
-.emotion_icon {
-  align-self: center;
-  position:fixed;
-    width:40px;
-    height:40px;
-    background-color:#0C9;
-    color:#FFF;
-    border-radius:50px;
-    text-align:center;
-    box-shadow: 2px 2px 3px #999;  
-}
+.emotion_icon { width:32px; height:32px; }
 
-.review_icon {
-  width:40px;
-}
+.review_icon { width:20px; }
 
 .review_icon:hover {
   transform: scale(1.1);

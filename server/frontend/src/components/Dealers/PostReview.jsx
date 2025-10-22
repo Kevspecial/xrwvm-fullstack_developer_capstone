@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import "./Dealers.css";
 import "../assets/style.css";
@@ -8,18 +8,21 @@ import Header from '../Header/Header';
 const PostReview = () => {
   const [dealer, setDealer] = useState({});
   const [review, setReview] = useState("");
-  const [model, setModel] = useState();
+  const [make, setMake] = useState("");
+  const [model, setModel] = useState("");
   const [year, setYear] = useState("");
   const [date, setDate] = useState("");
   const [carmodels, setCarmodels] = useState([]);
 
-  let curr_url = window.location.href;
-  let root_url = curr_url.substring(0,curr_url.indexOf("postreview"));
   let params = useParams();
   let id =params.id;
-  let dealer_url = root_url+`djangoapp/dealer/${id}`;
-  let review_url = root_url+`djangoapp/add_review`;
-  let carmodels_url = root_url+`djangoapp/get_cars`;
+  // Use absolute paths to the Django endpoints to avoid brittle URL math
+  let dealer_url = `/djangoapp/dealer/${id}`;
+  let review_url = `/djangoapp/add_review`;
+  let carmodels_url = `/djangoapp/get_cars`;
+
+  const makes = useMemo(() => Array.from(new Set(carmodels.map(c => c.CarMake))), [carmodels]);
+  const modelsForMake = useMemo(() => carmodels.filter(c => c.CarMake === make).map(c => c.CarModel), [carmodels, make]);
 
   const postreview = async ()=>{
     let name = sessionStorage.getItem("firstname")+" "+sessionStorage.getItem("lastname");
@@ -27,14 +30,10 @@ const PostReview = () => {
     if(name.includes("null")) {
       name = sessionStorage.getItem("username");
     }
-    if(!model || review === "" || date === "" || year === "" || model === "") {
+    if(!make || !model || review === "" || date === "" || year === "") {
       alert("All details are mandatory")
       return;
     }
-
-    let model_split = model.split(" ");
-    let make_chosen = model_split[0];
-    let model_chosen = model_split[1];
 
     let jsoninput = JSON.stringify({
       "name": name,
@@ -42,8 +41,8 @@ const PostReview = () => {
       "review": review,
       "purchase": true,
       "purchase_date": date,
-      "car_make": make_chosen,
-      "car_model": model_chosen,
+      "car_make": make,
+      "car_model": model,
       "car_year": year,
     });
 
@@ -93,30 +92,42 @@ const PostReview = () => {
   return (
     <div>
       <Header/>
-      <div  style={{margin:"5%"}}>
-      <h1 style={{color:"darkblue"}}>{dealer.full_name}</h1>
-      <textarea id='review' cols='50' rows='7' onChange={(e) => setReview(e.target.value)}></textarea>
-      <div className='input_field'>
-      Purchase Date <input type="date" onChange={(e) => setDate(e.target.value)}/>
+      <div className="container container-narrow py-4">
+        <div className="card card-clean p-4">
+          <h3 className="mb-3">Post a Review {dealer?.full_name ? `for ${dealer.full_name}` : ''}</h3>
+          <div className="mb-3">
+            <label htmlFor='review' className='form-label'>Review</label>
+            <textarea id='review' className='form-control' rows='6' onChange={(e) => setReview(e.target.value)}></textarea>
+          </div>
+          <div className='row g-3'>
+            <div className='col-md-6'>
+              <label className='form-label'>Purchase Date</label>
+              <input type="date" className='form-control' onChange={(e) => setDate(e.target.value)}/>
+            </div>
+            <div className='col-md-3'>
+              <label className='form-label'>Car Make</label>
+              <select className='form-select' value={make} onChange={(e)=> { setMake(e.target.value); setModel(""); }}>
+                <option value="" disabled>Choose Make</option>
+                {makes.map(m => <option key={m} value={m}>{m}</option>)}
+              </select>
+            </div>
+            <div className='col-md-3'>
+              <label className='form-label'>Car Model</label>
+              <select className='form-select' value={model} onChange={(e)=> setModel(e.target.value)} disabled={!make}>
+                <option value="" disabled>{make ? 'Choose Model' : 'Select make first'}</option>
+                {modelsForMake.map((m, idx) => <option key={`${make}-${m}-${idx}`} value={m}>{m}</option>)}
+              </select>
+            </div>
+            <div className='col-md-6'>
+              <label className='form-label'>Car Year</label>
+              <input type="number" className='form-control' onChange={(e) => setYear(e.target.value)} max={new Date().getFullYear()} min={2015} placeholder='e.g., 2020'/>
+            </div>
+          </div>
+          <div className='d-flex justify-content-end mt-4'>
+            <button className='btn btn-brand text-white' onClick={postreview}>Post Review</button>
+          </div>
+        </div>
       </div>
-      <div className='input_field'>
-      Car Make 
-      <select name="cars" id="cars" onChange={(e) => setModel(e.target.value)}>
-      <option value="" selected disabled hidden>Choose Car Make and Model</option>
-      {carmodels.map(carmodel => (
-          <option value={carmodel.CarMake+" "+carmodel.CarModel}>{carmodel.CarMake} {carmodel.CarModel}</option>
-      ))}
-      </select>        
-      </div >
-
-      <div className='input_field'>
-      Car Year <input type="int" onChange={(e) => setYear(e.target.value)} max={2023} min={2015}/>
-      </div>
-
-      <div>
-      <button className='postreview' onClick={postreview}>Post Review</button>
-      </div>
-    </div>
     </div>
   )
 }

@@ -43,30 +43,28 @@ const Login = ({ onClose }) => {
   return (
     <div>
       <Header/>
-    <div onClick={onClose}>
-      <div
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-        className='modalContainer'
-      >
-          <form className="login_panel" style={{}} onSubmit={login}>
-              <div>
-              <span className="input_field">Username </span>
-              <input type="text"  name="username" placeholder="Username" className="input_field" onChange={(e) => setUserName(e.target.value)}/>
-              </div>
-              <div>
-              <span className="input_field">Password </span>
-              <input name="psw" type="password"  placeholder="Password" className="input_field" onChange={(e) => setPassword(e.target.value)}/>            
-              </div>
-              <div>
-              <input className="action_button" type="submit" value="Login"/>
-              <input className="action_button" type="button" value="Cancel" onClick={()=>setOpen(false)}/>
-              </div>
-              <a className="loginlink" href="/register">Register Now</a>
+      <div className='container container-narrow py-4'>
+        <div className='card card-clean p-4 mx-auto' style={{maxWidth:'520px'}}>
+          <h3 className='mb-3'>Sign in</h3>
+          <form onSubmit={login}>
+            <div className='mb-3'>
+              <label className='form-label'>Username</label>
+              <input type="text" name="username" placeholder="Username" className="form-control" onChange={(e) => setUserName(e.target.value)} />
+            </div>
+            <div className='mb-3'>
+              <label className='form-label'>Password</label>
+              <input name="psw" type="password" placeholder="Password" className="form-control" onChange={(e) => setPassword(e.target.value)} />
+            </div>
+            <div className='d-flex align-items-center justify-content-between'>
+              <button className='btn btn-brand text-white' type='submit'>Login</button>
+              <button className='btn btn-outline-secondary' type='button' onClick={()=>setOpen(false)}>Cancel</button>
+            </div>
           </form>
+          <div className='mt-3'>
+            <a className="text-decoration-none" href="/register">Register Now</a>
+          </div>
+        </div>
       </div>
-    </div>
     </div>
   );
 };

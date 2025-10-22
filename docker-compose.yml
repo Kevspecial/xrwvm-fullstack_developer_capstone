@@ -1,0 +1,49 @@
+services:
+  mongo_db:
+    image: mongo:6
+    container_name: db_container
+    ports:
+      - "27017:27017"
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+
+  node_api:
+    build:
+      context: ./server/database
+      dockerfile: Dockerfile
+    image: nodeapp:latest
+    container_name: node_api
+    ports:
+      - "3030:3030"
+    depends_on:
+      - mongo_db
+    restart: unless-stopped
+
+  sentiment:
+    build:
+      context: ./server/djangoapp/microservices
+      dockerfile: Dockerfile
+    container_name: sentiment_service
+    ports:
+      - "5050:5000"
+    restart: unless-stopped
+
+  django:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: django_app
+    environment:
+      - backend_url=http://node_api:3030
+      - sentiment_analyzer_url=http://sentiment:5000/
+      - DJANGO_DEBUG=true
+    ports:
+      - "8000:8000"
+    depends_on:
+      - node_api
+      - sentiment
+    restart: unless-stopped
+
+volumes:
+  mongo_data: {}
